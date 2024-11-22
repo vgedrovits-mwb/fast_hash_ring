@@ -28,15 +28,15 @@ static VALUE cFastHashRing_hash_val(VALUE vself, VALUE vkey, VALUE vx){
   return vhash;
 }
 
-static VALUE cFastHashRing_generate_circle(VALUE vself){
+static VALUE cFastHashRing_generate_circle(int argc, VALUE *argv, VALUE self) {
   VALUE vnodes, vweights, vring, vsorted_keys;
   int i, j, n, vnodes_len;
   int total_weight = 0;
 
-  vnodes = rb_iv_get(vself, "@nodes");
-  vweights = rb_iv_get(vself, "@weights");
-  vring = rb_iv_get(vself, "@ring");
-  vsorted_keys = rb_iv_get(vself, "@sorted_keys");
+  vnodes = rb_iv_get(self, "@nodes");
+  vweights = rb_iv_get(self, "@weights");
+  vring = rb_iv_get(self, "@ring");
+  vsorted_keys = rb_iv_get(self, "@sorted_keys");
 
   vnodes_len = RARRAY_LEN(vnodes);
   for(i = 0;i < vnodes_len;i++){
@@ -70,7 +70,7 @@ static VALUE cFastHashRing_generate_circle(VALUE vself){
       }
     }
   }
-  rb_iv_set(vself, "@sorted_keys", rb_ary_sort(vsorted_keys));
+  rb_iv_set(self, "@sorted_keys", rb_ary_sort(vsorted_keys));
 
   return Qtrue;
 }
@@ -189,7 +189,7 @@ static VALUE cFastHashRing_initialize(int argc, VALUE *argv, VALUE vself){
   rb_iv_set(vself, "@ring", vring);
   rb_iv_set(vself, "@sorted_keys", vsorted_keys);
 
-  return cFastHashRing_generate_circle(vself);
+  return cFastHashRing_generate_circle(argc, argv, vself);
 }
 
 static VALUE cFastHashRing_sorted_keys(VALUE vself){
